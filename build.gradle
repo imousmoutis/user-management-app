@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version "$springBootVersion"
+}
+
+group 'gr.ioannis'
+sourceCompatibility = JavaVersion.VERSION_14
+targetCompatibility = JavaVersion.VERSION_14
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+dependencies {
+    implementation "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+    implementation "org.springframework.boot:spring-boot-starter-security:$springBootVersion"
+    implementation "io.jsonwebtoken:jjwt:$jjwtVersion"
+
+    implementation "org.liquibase:liquibase-core:$liquibaseVersion"
+    implementation "org.modelmapper:modelmapper:$modelMapperVersion"
+
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    runtimeOnly "org.mariadb.jdbc:mariadb-java-client:$mariaDbClientVersion"
+
+    annotationProcessor(
+            "org.projectlombok:lombok:$lombokVersion"
+    )
+}

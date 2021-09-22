@@ -1,0 +1,156 @@
+databaseChangeLog:
+- changeSet:
+    id: db.changelog-1.0
+    author: Ioannis K. Mousmoutis (imousmoutis@gmail.com)
+    changes:
+    - createTable:
+        tableName: user
+        columns:
+        - column:
+            name: id
+            type: uuid
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: firstname
+            type: varchar(30)
+            constraints:
+              nullable: false
+        - column:
+            name: lastname
+            type: varchar(30)
+            constraints:
+              nullable: false
+        - column:
+            name: username
+            type: varchar(80)
+            constraints:
+              nullable: false
+        - column:
+            name: password
+            type: varchar(60)
+            constraints:
+              nullable: false
+    - createTable:
+        tableName: role
+        columns:
+        - column:
+            name: id
+            type: uuid
+            constraints:
+              primaryKey: true
+              nullable: false
+        - column:
+            name: name
+            type: varchar(20)
+            constraints:
+              nullable: false
+    - createTable:
+        tableName: user_role
+        columns:
+        - column:
+            name: user_id
+            type: uuid
+            constraints:
+              nullable: false
+        - column:
+            name: role_id
+            type: uuid
+            constraints:
+              nullable: false
+    -  addPrimaryKey:
+         columnNames:  user_id, role_id
+         constraintName:  pk_user_id_role_id
+         tableName:  user_role
+    - addForeignKeyConstraint:
+        constraintName: fk_user_role_user_id
+        baseTableName: user_role
+        baseColumnNames: user_id
+        referencedTableName: user
+        referencedColumnNames: id
+        onDelete: cascade
+        onUpdate: cascade
+    - addForeignKeyConstraint:
+        constraintName: fk_user_role_role_id
+        baseTableName: user_role
+        baseColumnNames: role_id
+        referencedTableName: role
+        referencedColumnNames: id
+        onDelete: cascade
+        onUpdate: cascade
+
+    -  insert:
+         columns:
+         -  column:
+              name:  id
+              value: e3a1c520-2db0-41fd-a330-5444ef9bcda8
+         -  column:
+              name:  name
+              value: ADMIN
+         tableName:  role
+    -  insert:
+         columns:
+         -  column:
+              name:  id
+              value: a6aa4168-2265-4094-8de6-98e439957662
+         -  column:
+              name:  name
+              value: VIEWER
+         tableName:  role
+
+    -  insert:
+         columns:
+         -  column:
+              name:  id
+              value: 26ac56b0-4f76-4d78-8359-03b040769704
+         -  column:
+              name:  firstname
+              value: Ioannis
+         -  column:
+              name:  lastname
+              value: Mousmoutis
+         -  column:
+              name:  username
+              value: imousmoutis
+         -  column:
+              name:  password
+              value: $2a$12$.LbupmAFcRYqbSdxIzRIsOKmjJRWksXLqbrfiQznIJyCrDvhDpkJ.
+         tableName:  user
+    -  insert:
+         columns:
+         -  column:
+              name:  user_id
+              value: 26ac56b0-4f76-4d78-8359-03b040769704
+         -  column:
+              name:  role_id
+              value: e3a1c520-2db0-41fd-a330-5444ef9bcda8
+         tableName:  user_role
+
+    -  insert:
+         columns:
+         -  column:
+              name:  id
+              value: 072dbda8-b271-4b95-bcdb-e99f7e0c4028
+         -  column:
+              name:  firstname
+              value: John
+         -  column:
+              name:  lastname
+              value: Doe
+         -  column:
+              name:  username
+              value: johndoe
+         -  column:
+              name:  password
+              value: $2a$12$.gGXz4FZs/YvA8gTtZ0dPehJcyWA6py8sZFiw9lfYLPGNTXwZSJLe
+         tableName:  user
+    -  insert:
+         columns:
+         -  column:
+              name:  user_id
+              value: 072dbda8-b271-4b95-bcdb-e99f7e0c4028
+         -  column:
+              name:  role_id
+              value: a6aa4168-2265-4094-8de6-98e439957662
+         tableName:  user_role
