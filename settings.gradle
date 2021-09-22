@@ -1,2 +1,3 @@
-rootProject.name = 'user-management-app-server'
+rootProject.name = 'user-management-app'
 
+include "user-management-app-server", "user-management-app-ui"
