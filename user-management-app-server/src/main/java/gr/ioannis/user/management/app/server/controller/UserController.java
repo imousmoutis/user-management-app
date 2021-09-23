@@ -4,7 +4,7 @@ import gr.ioannis.user.management.app.server.config.security.JWTProvider;
 import gr.ioannis.user.management.app.server.dto.LoginUserDTO;
 import gr.ioannis.user.management.app.server.dto.TokenDTO;
 import gr.ioannis.user.management.app.server.dto.UserDTO;
-import gr.ioannis.user.management.app.server.mapper.UserMapper;
+import gr.ioannis.user.management.app.server.model.User;
 import gr.ioannis.user.management.app.server.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -31,24 +30,13 @@ public class UserController {
 
   private final UserService userService;
 
-  private final UserMapper userMapper;
-
   private final AuthenticationManager authenticationManager;
 
   private final JWTProvider jwtProvider;
 
   @PostMapping(value = "/authenticate")
-  public ResponseEntity<?> generateToken(@RequestBody LoginUserDTO loginUser) throws AuthenticationException {
-
-    final Authentication authentication = authenticationManager.authenticate(
-        new UsernamePasswordAuthenticationToken(
-            loginUser.getUsername(),
-            loginUser.getPassword()
-        )
-    );
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    final String token = jwtProvider.generateToken(authentication);
-    return ResponseEntity.ok(new TokenDTO(token));
+  public ResponseEntity<TokenDTO> generateToken(@RequestBody LoginUserDTO loginUser) throws AuthenticationException {
+    return ResponseEntity.ok(new TokenDTO(performAuthentication(loginUser)));
   }
 
   @GetMapping(value = "/exists/{username}")
@@ -56,10 +44,29 @@ public class UserController {
     return ResponseEntity.ok(userService.userExistsByUsername(username));
   }
 
+  @PostMapping(value = "/register")
+  public ResponseEntity<TokenDTO> registerUser(@RequestBody UserDTO userDTO) {
+    userService.saveUser(userDTO);
+    return ResponseEntity.ok(new TokenDTO(performAuthentication(new LoginUserDTO(userDTO.getUsername(),
+        userDTO.getPassword()))));
+  }
+
   @PreAuthorize("hasRole('ADMIN')")
   @GetMapping
   public List<UserDTO> getAllUsers() {
-    return userService.getAllUsers().stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+    return null;
+    //return userService.getAllUsers().stream().map(userMapper::convertToDTO).collect(Collectors.toList());
+  }
+
+  private String performAuthentication(LoginUserDTO loginUser) {
+    final Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            loginUser.getUsername(),
+            loginUser.getPassword()
+        )
+    );
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+    return jwtProvider.generateToken(authentication);
   }
 
 }

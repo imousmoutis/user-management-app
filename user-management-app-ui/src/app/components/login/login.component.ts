@@ -31,14 +31,10 @@ export class LoginComponent implements OnInit {
     this.userService.authenticate(
       new LoginUser(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value)).subscribe(
       (response) => {
-        this.matSnackBar.open("You are being redirected to the login page.", '', {
-          duration: 3000
-        });
+        this.matSnackBar.open("You are being redirected to the login page.");
       },
       (error) => {
-        this.matSnackBar.open("The credentials you provided were incorrect.", 'Close', {
-          duration: 3000
-        });
+        this.matSnackBar.open("The credentials you provided were incorrect.", 'Close');
       })
   }
 

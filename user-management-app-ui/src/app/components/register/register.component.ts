@@ -3,6 +3,8 @@ import {AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErr
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {UserService} from '../../services/user.service';
+import {User} from '../../dto/user.dto';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -13,7 +15,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, private userService: UserService) {
+  constructor(public formBuilder: FormBuilder, private userService: UserService, private matSnackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -53,7 +55,16 @@ export class RegisterComponent implements OnInit {
   }
 
   submitForm() {
-    console.log("hey");
+    this.userService.register(
+      new User(this.registerForm.get('firstName')?.value, this.registerForm.get('lastName')?.value,
+        this.registerForm.get('username')?.value, this.registerForm.get('password')?.value)).subscribe(
+      (response) => {
+        this.matSnackBar.open("You have successfully registered.");
+      },
+      (error) => {
+        console.log(error)
+        this.matSnackBar.open("An error occurred. Please try again.", 'Close');
+      })
   }
 
 }

@@ -1,5 +1,8 @@
 package gr.ioannis.user.management.app.server.service;
 
+import gr.ioannis.user.management.app.server.dto.UserDTO;
+import gr.ioannis.user.management.app.server.mapper.UserMapper;
+import gr.ioannis.user.management.app.server.model.Role;
 import gr.ioannis.user.management.app.server.model.User;
 import gr.ioannis.user.management.app.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -7,10 +10,10 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -19,9 +22,11 @@ public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
 
-  public List<User> getAllUsers() {
-    return userRepository.findAll();
-  }
+  private final UserMapper userMapper;
+
+  private final RoleService roleService;
+
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,6 +36,19 @@ public class UserService implements UserDetailsService {
     }
     return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
         getAuthority(user));
+  }
+
+  public void saveUser(UserDTO userDTO) {
+    User user = userMapper.convert(userDTO);
+
+    Role role = roleService.getRoleByName("VIEWER");
+    Set<Role> roleSet = new HashSet<>();
+    roleSet.add(role);
+
+    user.setRoles(roleSet);
+    user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+
+    userRepository.save(user);
   }
 
   public Boolean userExistsByUsername(String username) {
