@@ -33,6 +33,10 @@ public class UserService implements UserDetailsService {
         getAuthority(user));
   }
 
+  public Boolean userExistsByUsername(String username) {
+    return userRepository.findByUsername(username) != null;
+  }
+
   private Set<SimpleGrantedAuthority> getAuthority(User user) {
     Set<SimpleGrantedAuthority> authorities = new HashSet<>();
     user.getRoles().forEach(role -> {
