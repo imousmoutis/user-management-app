@@ -9,15 +9,27 @@ import {HeaderComponent} from './components/header/header.component';
 import {AngularMaterialModule} from './material.module';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
+import {JwtModule} from '@auth0/angular-jwt';
+import {ProfileComponent} from './components/profile/profile.component';
+import {AuthInterceptor} from './interceptors/auth-interceptor';
+import {AdminPanelComponent} from './components/admin-panel/admin-panel.component';
+
+const TOKEN_KEY = 'auth-token';
+
+export function tokenGetter() {
+  return localStorage.getItem(TOKEN_KEY);
+}
 
 @NgModule({
   declarations: [
     AppComponent,
     RegisterComponent,
     LoginComponent,
-    HeaderComponent
+    HeaderComponent,
+    ProfileComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,
@@ -25,9 +37,22 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS} from '@angular/material/snack-bar';
     AngularMaterialModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      },
+    })
   ],
-  providers: [{provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 3000}}],
+  providers: [
+    {
+      provide: MAT_SNACK_BAR_DEFAULT_OPTIONS,
+      useValue: {duration: 3000}
+    }, {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule {

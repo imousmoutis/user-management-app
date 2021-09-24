@@ -11,24 +11,23 @@ import {User} from '../dto/user.dto';
 export class UserService {
 
   serverEndpoint = "http://localhost:8080/api"
-
-  constructor(private httpClient: HttpClient) {
-  }
-
-  httpHeader = {
+  httpHeaders = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json'
     })
   }
 
+  constructor(private httpClient: HttpClient) {
+  }
+
   authenticate(user: LoginUser): Observable<JWT> {
-    return this.httpClient.post<JWT>(this.serverEndpoint + '/user/authenticate',
-      JSON.stringify(user), this.httpHeader)
+    return this.httpClient.post<JWT>(this.serverEndpoint + '/authenticate',
+      JSON.stringify(user), this.httpHeaders).pipe()
   }
 
   register(user: User): Observable<JWT> {
-    return this.httpClient.post<JWT>(this.serverEndpoint + '/user/register', JSON.stringify(user),
-      this.httpHeader)
+    return this.httpClient.post<JWT>(this.serverEndpoint + '/register', JSON.stringify(user),
+      this.httpHeaders).pipe()
   }
 
   getUserByUsername(username: string): Observable<boolean> {

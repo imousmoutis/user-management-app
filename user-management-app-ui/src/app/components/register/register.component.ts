@@ -5,6 +5,7 @@ import {map} from 'rxjs/operators';
 import {UserService} from '../../services/user.service';
 import {User} from '../../dto/user.dto';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthenticateService} from '../../services/authenticate.service';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,11 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, private userService: UserService, private matSnackBar: MatSnackBar) {
+  constructor(public formBuilder: FormBuilder, private userService: UserService, private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar) {
+  }
+
+  get f() {
+    return this.registerForm.controls;
   }
 
   ngOnInit(): void {
@@ -30,10 +35,6 @@ export class RegisterComponent implements OnInit {
       password: ['', Validators.required],
       repeatPassword: ['', Validators.required]
     }, {validators: this.checkPasswords})
-  }
-
-  get f() {
-    return this.registerForm.controls;
   }
 
   checkPasswords(group: FormGroup) {
@@ -59,10 +60,10 @@ export class RegisterComponent implements OnInit {
       new User(this.registerForm.get('firstName')?.value, this.registerForm.get('lastName')?.value,
         this.registerForm.get('username')?.value, this.registerForm.get('password')?.value)).subscribe(
       (response) => {
+        this.authenticateService.saveToken(response.token);
         this.matSnackBar.open("You have successfully registered.");
       },
       (error) => {
-        console.log(error)
         this.matSnackBar.open("An error occurred. Please try again.", 'Close');
       })
   }

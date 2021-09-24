@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../services/user.service';
 import {LoginUser} from '../../dto/login-user.dto';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {AuthenticateService} from '../../services/authenticate.service';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,7 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, private userService: UserService, private matSnackBar: MatSnackBar) {
+  constructor(public formBuilder: FormBuilder, private userService: UserService, private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar) {
   }
 
   ngOnInit(): void {
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit {
     this.userService.authenticate(
       new LoginUser(this.loginForm.get('username')?.value, this.loginForm.get('password')?.value)).subscribe(
       (response) => {
+        this.authenticateService.saveToken(response.token);
         this.matSnackBar.open("You are being redirected to the login page.");
       },
       (error) => {
