@@ -6,6 +6,7 @@ import {UserService} from '../../services/user.service';
 import {User} from '../../dto/user.dto';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthenticateService} from '../../services/authenticate.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -16,7 +17,8 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, private userService: UserService, private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar) {
+  constructor(public formBuilder: FormBuilder, private userService: UserService,
+              private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar, private router: Router) {
   }
 
   get f() {
@@ -25,6 +27,9 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
     this.reactiveForm()
+    if (this.authenticateService.isLoggedIn()) {
+      this.router.navigate(['profile']).then();
+    }
   }
 
   reactiveForm() {

@@ -4,6 +4,7 @@ import {UserService} from '../../services/user.service';
 import {LoginUser} from '../../dto/login-user.dto';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {AuthenticateService} from '../../services/authenticate.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -14,11 +15,15 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(public formBuilder: FormBuilder, private userService: UserService, private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar) {
+  constructor(public formBuilder: FormBuilder, private userService: UserService,
+              private authenticateService: AuthenticateService, private matSnackBar: MatSnackBar, private router: Router) {
   }
 
   ngOnInit(): void {
     this.reactiveForm()
+    if (this.authenticateService.isLoggedIn()) {
+      this.router.navigate(['profile']).then();
+    }
   }
 
   reactiveForm() {
