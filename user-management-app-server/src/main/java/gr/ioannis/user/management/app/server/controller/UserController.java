@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -24,8 +26,13 @@ public class UserController {
     return ResponseEntity.ok(userService.userExistsByUsername(username));
   }
 
-  @PreAuthorize("hasRole('ADMIN')")
   @GetMapping
+  public ResponseEntity<UserDTO> getUser(Principal principal) {
+    return ResponseEntity.ok(userService.getUser(principal.getName()));
+  }
+
+  @PreAuthorize("hasRole('ADMIN')")
+  @PostMapping
   public List<UserDTO> getAllUsers() {
     return null;
     //return userService.getAllUsers().stream().map(userMapper::convertToDTO).collect(Collectors.toList());

@@ -34,4 +34,8 @@ export class UserService {
     return this.httpClient.get<boolean>(this.serverEndpoint + '/user/exists/' + username)
     .pipe()
   }
+
+  getUser(): Observable<User> {
+    return this.httpClient.get<User>(this.serverEndpoint + '/user', this.httpHeaders).pipe()
+  }
 }

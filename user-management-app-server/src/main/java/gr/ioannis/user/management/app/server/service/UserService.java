@@ -51,6 +51,10 @@ public class UserService implements UserDetailsService {
     userRepository.save(user);
   }
 
+  public UserDTO getUser(String username) {
+    return userMapper.convertToDTO(userRepository.findByUsername(username));
+  }
+
   public Boolean userExistsByUsername(String username) {
     return userRepository.findByUsername(username) != null;
   }

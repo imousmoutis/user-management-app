@@ -12,13 +12,14 @@ public class UserMapper {
 
   private final ModelMapper modelMapper;
 
-  public User convert(UserDTO userDTO){
+  public User convert(UserDTO userDTO) {
     User user = modelMapper.map(userDTO, User.class);
     return user;
   }
 
   public UserDTO convertToDTO(User user) {
     UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+    userDTO.setPassword(null);
     return userDTO;
   }
 
