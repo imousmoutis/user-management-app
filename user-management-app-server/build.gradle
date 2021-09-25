@@ -30,10 +30,15 @@ dependencies {
     implementation "org.liquibase:liquibase-core:$liquibaseVersion"
     implementation "org.modelmapper:modelmapper:$modelMapperVersion"
 
+    compile "com.querydsl:querydsl-core:$queryDslVersion"
+    compile "com.querydsl:querydsl-jpa:$queryDslVersion"
     compileOnly "org.projectlombok:lombok:$lombokVersion"
     runtimeOnly "org.mariadb.jdbc:mariadb-java-client:$mariaDbClientVersion"
 
     annotationProcessor(
-            "org.projectlombok:lombok:$lombokVersion"
+            "org.projectlombok:lombok:$lombokVersion",
+            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:$jpaVersion",
+            "javax.annotation:javax.annotation-api:$javaxAnApiVersion",
+            "com.querydsl:querydsl-apt:$queryDslVersion:jpa",
     )
 }

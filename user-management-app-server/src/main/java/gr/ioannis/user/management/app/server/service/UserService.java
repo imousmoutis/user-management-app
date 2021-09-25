@@ -1,11 +1,13 @@
 package gr.ioannis.user.management.app.server.service;
 
+import gr.ioannis.user.management.app.server.builder.UserSearchBuilder;
 import gr.ioannis.user.management.app.server.dto.UserDTO;
 import gr.ioannis.user.management.app.server.mapper.UserMapper;
 import gr.ioannis.user.management.app.server.model.Role;
 import gr.ioannis.user.management.app.server.model.User;
 import gr.ioannis.user.management.app.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -27,6 +30,8 @@ public class UserService implements UserDetailsService {
   private final RoleService roleService;
 
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  private final UserSearchBuilder userSearchBuilder;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -57,6 +62,14 @@ public class UserService implements UserDetailsService {
 
   public Boolean userExistsByUsername(String username) {
     return userRepository.findByUsername(username) != null;
+  }
+
+  public Page<UserDTO> findUsers(String searchValue, String sortColumn, String sortOrder, Long page,
+      Long size) {
+    Page<UserDTO> users = userRepository.findUsers(userSearchBuilder.buildSearchPredicate(searchValue),
+        userSearchBuilder.buildOrder(sortColumn, sortOrder), page, size);
+
+    return users;
   }
 
   private Set<SimpleGrantedAuthority> getAuthority(User user) {
