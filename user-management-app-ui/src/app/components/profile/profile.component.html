@@ -4,15 +4,15 @@
     <form [formGroup]="userForm" novalidate>
 
       <mat-form-field class="example-full-width">
-        <input formControlName="firstName" matInput placeholder="First Name" type="text" [readonly]="true">
+        <input [readonly]="true" formControlName="firstName" matInput placeholder="First Name" type="text">
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
-        <input formControlName="lastName" matInput placeholder="Last Name" type="text" [readonly]="true">
+        <input [readonly]="true" formControlName="lastName" matInput placeholder="Last Name" type="text">
       </mat-form-field>
 
       <mat-form-field class="example-full-width">
-        <input formControlName="username" matInput placeholder="Username" type="text" [readonly]="true">
+        <input [readonly]="true" formControlName="username" matInput placeholder="Username" type="text">
       </mat-form-field>
 
     </form>

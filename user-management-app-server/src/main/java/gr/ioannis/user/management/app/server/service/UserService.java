@@ -72,9 +72,7 @@ public class UserService implements UserDetailsService {
 
   private Set<SimpleGrantedAuthority> getAuthority(User user) {
     Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-    user.getRoles().forEach(role -> {
-      authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
-    });
+    user.getRoles().forEach(role -> authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
     return authorities;
   }
 }

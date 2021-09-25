@@ -1,7 +1,7 @@
 <mat-toolbar class="mat-elevation-z10" color="primary" fxLayout="row">
   <span>User Management App</span>
   <span class="example-spacer"></span>
-  <button [routerLink]="'login'" *ngIf="!isLoggedIn" aria-label="Login icon" class="" mat-icon-button>
+  <button *ngIf="!isLoggedIn" [routerLink]="'login'" aria-label="Login icon" class="" mat-icon-button>
     <mat-icon>login</mat-icon>
   </button>
   <button (click)="logout()" *ngIf="isLoggedIn" aria-label="Logout icon" class="" mat-icon-button>
