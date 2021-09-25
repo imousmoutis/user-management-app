@@ -16,7 +16,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -66,10 +65,9 @@ public class UserService implements UserDetailsService {
 
   public Page<UserDTO> findUsers(String searchValue, String sortColumn, String sortOrder, Long page,
       Long size) {
-    Page<UserDTO> users = userRepository.findUsers(userSearchBuilder.buildSearchPredicate(searchValue),
-        userSearchBuilder.buildOrder(sortColumn, sortOrder), page, size);
 
-    return users;
+    return userRepository.findUsers(userSearchBuilder.buildSearchPredicate(searchValue),
+        userSearchBuilder.buildOrder(sortColumn, sortOrder), page, size);
   }
 
   private Set<SimpleGrantedAuthority> getAuthority(User user) {
