@@ -1,0 +1,52 @@
+version: "3.7"
+
+networks:
+  user-management-app:
+
+services:
+  user-management-app-server:
+    image: "imousmoutis/user-management-app-server:1.0.0-SNAPSHOT"
+    hostname: user-management-app-server
+    container_name: user-management-app-server
+    restart: unless-stopped
+    depends_on:
+    - maria_db
+    networks:
+    - user-management-app
+
+  user-management-app-db:
+    image: "mariadb:10.5.12"
+    hostname: user-management-app-db
+    container_name: user-management-app-db
+    restart: unless-stopped
+    ports:
+    - 3307:3306
+    environment:
+      MYSQL_DATABASE: usermanagementapp
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+    - user-management-app
+
+  user-management-app-ui:
+    image: "imousmoutis/user-management-app-ui:1.0.0-SNAPSHOT"
+    hostname: user-management-app-ui
+    container_name: user-management-app-ui
+    restart: unless-stopped
+    ports:
+    - 8080:80
+    networks:
+    - user-management-app
+
+  user-management-app-logs:
+    image: amir20/dozzle:v3.8.0
+    hostname: user-management-app-logs
+    container_name: user-management-app-logs
+    restart: unless-stopped
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+    - 9999:8080
+    networks:
+    - user-management-app

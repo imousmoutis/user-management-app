@@ -1,5 +1,6 @@
 plugins {
   id "com.github.node-gradle.node" version "$nodeGradleVersion"
+  id "com.palantir.docker" version "$dockerGradleVersion"
 }
 
 node {
@@ -12,4 +13,10 @@ node {
 
 task build(type: NpmTask, dependsOn: 'npmInstall') {
   args = ['run', 'build']
+}
+
+docker {
+  name "imousmoutis/${project.name}:${project.version}"
+  dockerfile file('Dockerfile')
+  copySpec.from("dist/user-management-app-ui").into("dist")
 }

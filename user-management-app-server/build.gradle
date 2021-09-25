@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version "$springBootVersion"
+    id "com.palantir.docker" version "$dockerGradleVersion"
 }
 
 group 'gr.ioannis'
@@ -41,4 +42,15 @@ dependencies {
             "javax.annotation:javax.annotation-api:$javaxAnApiVersion",
             "com.querydsl:querydsl-apt:$queryDslVersion:jpa",
     )
+}
+
+bootJar {
+    archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+docker {
+    name "imousmoutis/${project.name}:${project.version}"
+    dockerfile file('Dockerfile')
+    files "build/libs/${bootJar.archiveFileName.get()}", 'wait-for-it.sh'
+    buildArgs([JAR_FILE: bootJar.archiveFileName.get()])
 }
