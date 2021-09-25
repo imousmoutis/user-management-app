@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {LoginUser} from '../dto/login-user.dto';
 import {JWT} from '../dto/jwt.dto';
 import {User} from '../dto/user.dto';
+import {map} from 'rxjs/operators';
+import {UserList} from '../dto/user-list.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +39,19 @@ export class UserService {
 
   getUser(): Observable<User> {
     return this.httpClient.get<User>(this.serverEndpoint + '/user', this.httpHeaders).pipe()
+  }
+
+  searchUsers(value: string, sortColumn: string, sortOrder: string, page: number, size: number): Observable<UserList> {
+
+    return this.httpClient.get<UserList>(this.serverEndpoint + '/user/search', {
+      params: new HttpParams()
+      .set('value', value)
+      .set('sortColumn', sortColumn)
+      .set('sortOrder', sortOrder)
+      .set('page', page)
+      .set('size', size)
+    }).pipe(
+      map(res => res)
+    );
   }
 }

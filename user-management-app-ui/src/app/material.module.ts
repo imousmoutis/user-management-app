@@ -20,6 +20,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCardModule} from '@angular/material/card';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
   imports: [
@@ -40,6 +41,7 @@ import {MatCardModule} from '@angular/material/card';
     MatChipsModule,
     MatTooltipModule,
     MatTableModule,
+    MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
     MatCardModule
@@ -60,6 +62,7 @@ import {MatCardModule} from '@angular/material/card';
     MatChipsModule,
     MatTooltipModule,
     MatTableModule,
+    MatSortModule,
     MatPaginatorModule,
     MatSnackBarModule,
     MatCardModule

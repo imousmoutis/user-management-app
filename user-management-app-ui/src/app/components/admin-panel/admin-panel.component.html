@@ -1,1 +1,46 @@
-<p>admin-panel works!</p>
+<mat-card class="mat-elevation-z0 outline">
+  <mat-card-title>User List</mat-card-title>
+  <mat-card-content>
+    <br/>
+
+    <div fxLayout fxLayoutAlign="center center">
+      <mat-form-field fxFlex="40%">
+        <input matInput type="text" (keyup)="applyFilter($event)" placeholder="Filter Users...">
+      </mat-form-field>
+    </div>
+
+    <mat-table class="lessons-table mat-elevation-z8" [dataSource]="dataSource" matSort
+               (matSortChange)="applySort($event)" matSortActive="username" matSortDirection="desc" matSortDisableClear>
+
+      <ng-container matColumnDef="firstName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
+        <mat-cell class="description-cell"
+                  *matCellDef="let user">{{user.firstName}}</mat-cell>
+
+      </ng-container>
+
+      <ng-container matColumnDef="lastName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</mat-header-cell>
+        <mat-cell class="duration-cell"
+                  *matCellDef="let user">{{user.lastName}}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="username">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Username</mat-header-cell>
+        <mat-cell class="duration-cell"
+                  *matCellDef="let user">{{user.username}}</mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [pageSize]="2" [pageSizeOptions]="[2, 4, 6, 10, 20]">
+    </mat-paginator>
+
+  </mat-card-content>
+</mat-card>
+
+

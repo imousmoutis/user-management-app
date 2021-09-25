@@ -15,6 +15,7 @@ import {JwtModule} from '@auth0/angular-jwt';
 import {ProfileComponent} from './components/profile/profile.component';
 import {AuthInterceptor} from './interceptors/auth-interceptor';
 import {AdminPanelComponent} from './components/admin-panel/admin-panel.component';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 const TOKEN_KEY = 'auth-token';
 
@@ -38,6 +39,7 @@ export function tokenGetter() {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FlexLayoutModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter
