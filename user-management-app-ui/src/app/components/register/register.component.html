@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z0 outline">
   <mat-card-title>Register Form</mat-card-title>
   <mat-card-content>
-    <form (ngSubmit)="submitForm()" [formGroup]="registerForm" novalidate>
+    <form class="home-form" (ngSubmit)="submitForm()" [formGroup]="registerForm" novalidate>
 
       <mat-form-field class="example-full-width">
         <input formControlName="firstName" matInput placeholder="First Name" required type="text">

@@ -1,49 +1,64 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {UserService} from '../../services/user.service';
-import {MatTableDataSource} from '@angular/material/table';
 import {User} from '../../dto/user.dto';
 import {MatSort} from '@angular/material/sort';
 import {MatPaginator} from '@angular/material/paginator';
+import {FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss']
 })
-export class AdminPanelComponent implements AfterViewInit {
+export class AdminPanelComponent implements OnInit, AfterViewInit {
 
-  public displayedColumns = ['firstName', 'lastName', 'username'];
+  users: User[];
 
-  public dataSource = new MatTableDataSource<User>();
+  usersLength = 0;
+
+  displayedColumns: string[] = ['firstName', 'lastName', 'username'];
+
+  searchForm: FormGroup;
 
   @ViewChild(MatSort) sort: MatSort;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private userService: UserService) {
   }
 
+  ngOnInit(): void {
+    this.searchForm = new FormGroup({
+      search: new FormControl('')
+    });
+
+    this.searchForm.valueChanges.subscribe(data => {
+      this.paginator.pageIndex = 0;
+      this.changePage();
+    });
+  }
+
   ngAfterViewInit(): void {
-    this.dataSource.sort = this.sort;
-    this.dataSource.paginator = this.paginator;
+    this.fetchData(0, this.paginator.pageSize, this.sort.active, this.sort.start);
 
-    if (this.paginator && this.sort) {
-      this.searchUsers('', this.sort.active, this.sort.direction,0, 10);
-    }
+    this.sort.sortChange.subscribe(data => {
+      this.paginator.pageIndex = 0;
+      this.fetchData(0, this.paginator.pageSize, data.active, data.direction);
+    });
   }
 
-  searchUsers(value: string, sortColumn: string, sortOrder: string, page: number, size: number) {
-    this.userService.searchUsers(value, sortColumn, sortOrder, page, size).subscribe(res => {
-      this.dataSource.data = res.content;
-    })
+  fetchData(page: number, size: number, sort: string, sortDirection: string) {
+    this.userService.searchUsers(this.searchForm.value.search, sort, sortDirection, page, size)
+    .subscribe(data => {
+      this.users = data.content;
+      this.paginator.length = data.totalElements;
+      this.usersLength = data.totalElements;
+    });
   }
 
-  applyFilter(event: any) {
-    this.dataSource.filter = event.target.value.trim().toLocaleLowerCase();
-    this.searchUsers(this.dataSource.filter, this.sort.active, this.sort.direction, 0, 10);
-  }
-
-  applySort(event: any) {
-    this.searchUsers(this.dataSource.filter, event.active, event.direction, 0, 10);
+  changePage() {
+    this.fetchData(this.paginator.pageIndex, this.paginator.pageSize, this.sort.active,
+      this.sort.start);
   }
 
 }

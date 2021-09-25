@@ -1,16 +1,15 @@
 <mat-card class="mat-elevation-z0 outline">
   <mat-card-title>User List</mat-card-title>
   <mat-card-content>
-    <br/>
 
-    <div fxLayout fxLayoutAlign="center center">
-      <mat-form-field fxFlex="40%">
-        <input matInput type="text" (keyup)="applyFilter($event)" placeholder="Filter Users...">
+    <form [formGroup]="searchForm" novalidate>
+      <mat-form-field class="example-full-width">
+        <input formControlName="search" matInput placeholder="Filter Users..." type="text">
       </mat-form-field>
-    </div>
+    </form>
 
-    <mat-table class="lessons-table mat-elevation-z8" [dataSource]="dataSource" matSort
-               (matSortChange)="applySort($event)" matSortActive="username" matSortDirection="desc" matSortDisableClear>
+    <mat-table [dataSource]="users" matSort matSortActive="username" matSortDirection="desc"
+               matSortStart="desc" matSortDisableClear class="mat-elevation-z8">
 
       <ng-container matColumnDef="firstName">
         <mat-header-cell *matHeaderCellDef mat-sort-header>First Name</mat-header-cell>
@@ -37,8 +36,8 @@
 
     </mat-table>
 
-    <mat-paginator [pageSize]="2" [pageSizeOptions]="[2, 4, 6, 10, 20]">
-    </mat-paginator>
+    <mat-paginator (page)="changePage()" [pageSizeOptions]="[10, 25, 50, 100]" [pageSize]="10"
+                   [showFirstLastButtons]="true"></mat-paginator>
 
   </mat-card-content>
 </mat-card>

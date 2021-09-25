@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z0 outline">
   <mat-card-title>Profile Information</mat-card-title>
   <mat-card-content>
-    <form [formGroup]="userForm" novalidate>
+    <form class="home-form" [formGroup]="userForm" novalidate>
 
       <mat-form-field class="example-full-width">
         <input [readonly]="true" formControlName="firstName" matInput placeholder="First Name" type="text">

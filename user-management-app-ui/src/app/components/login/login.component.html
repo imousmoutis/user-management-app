@@ -1,7 +1,7 @@
 <mat-card class="mat-elevation-z0 outline">
   <mat-card-title>Login Form</mat-card-title>
   <mat-card-content>
-    <form (ngSubmit)="submitForm()" [formGroup]="loginForm" novalidate>
+    <form class="home-form" (ngSubmit)="submitForm()" [formGroup]="loginForm" novalidate>
 
       <mat-form-field class="example-full-width">
         <input formControlName="username" matInput placeholder="Username" required type="text">
